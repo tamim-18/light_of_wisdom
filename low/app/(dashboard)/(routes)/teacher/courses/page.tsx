@@ -1,7 +1,15 @@
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import React from "react";
 
 const Courses = () => {
-  return <div>Courses</div>;
+  return (
+    <div className="p-6">
+      <Link href="/teacher/create">
+        <Button>New Courses</Button>
+      </Link>
+    </div>
+  );
 };
 
 export default Courses;
