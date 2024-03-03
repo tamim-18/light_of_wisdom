@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Button } from "@/components/ui/button";
+import { FileUpload } from "@/components/file-upload";
 import { Input } from "@/components/ui/input";
 import {
   Form,
@@ -17,26 +18,27 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { Pencil } from "lucide-react";
+import { ImageIcon, Pencil, Plus } from "lucide-react";
 import toast from "react-hot-toast";
 import { Textarea } from "@/components/ui/textarea";
 import { Course } from "@prisma/client";
+import Image from "next/image";
 
-interface DescriptionFormProps {
+interface ImageFormProps {
   initialData: Course;
   courseId: string;
 }
 const formSchema = z.object({
-  description: z.string().min(1, {
-    message: "Description is required",
+  imageUrl: z.string().min(1, {
+    message: "Image is required",
   }),
 });
 
-const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
+const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      description: initialData?.description || "empty description",
+      imageUrl: initialData?.imageUrl || "",
     },
   });
   const { isSubmitting, isValid } = form.formState;
@@ -57,10 +59,16 @@ const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
   return (
     <div className=" mt-6 bg-slate-100 rounded-md p-4">
       <div className=" flex font-medium items-center justify-between">
-        Course Description
+        Course Image
         <Button onClick={toggleEditing} variant="ghost">
           {isEditing && <>Cancel</>}
-          {!isEditing && (
+          {!isEditing && !initialData.imageUrl && (
+            <>
+              <Plus className=" h-4 w-4 mr-2" />
+              Add Image
+            </>
+          )}
+          {!isEditing && initialData.imageUrl && (
             <>
               <Pencil className=" h-4 w-4 mr-2" />
               Edit Description
@@ -68,48 +76,38 @@ const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
           )}
         </Button>
       </div>
-      {!isEditing && (
-        <p
-          className={cn(
-            "text-sm mt-2",
-            !initialData.description && "text-slate-500 italic"
-          )}
-        >
-          {initialData.description || "No description provided"}
-        </p>
-      )}
-      {isEditing && (
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className=" space-y-4 mt-4"
-          >
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Textarea
-                      {...field}
-                      placeholder="eg. 'Description of the course'"
-                      disabled={isSubmitting}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+      {!isEditing &&
+        (!initialData.imageUrl ? (
+          <div className=" flex items-center justify-center h-60 bg-slate-200 rounded-md">
+            <ImageIcon className=" h-10 w-10 text-slate-500" />
+          </div>
+        ) : (
+          <div className=" relative aspect-video mt-2">
+            <Image
+              src={initialData.imageUrl}
+              alt="Course Image"
+              fill
+              className="object-cover rounded-md"
             />
-            <div className=" flex items-center gap-x-2 ">
-              <Button type="submit" disabled={!isValid || isSubmitting}>
-                Save
-              </Button>
-            </div>
-          </form>
-        </Form>
+          </div>
+        ))}
+      {isEditing && (
+        <div>
+          <FileUpload
+            endpoint="courseImage"
+            onChange={(url) => {
+              if (url) {
+                onSubmit({ imageUrl: url });
+              }
+            }}
+          />
+          <div className="text-xs text-muted-foreground mt-4">
+            16:9 aspect ratio recommended
+          </div>
+        </div>
       )}
     </div>
   );
 };
 
-export default DescriptionForm;
+export default ImageForm;
