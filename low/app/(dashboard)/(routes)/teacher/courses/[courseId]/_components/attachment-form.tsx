@@ -76,6 +76,9 @@ const AttachmentForm = ({ initialData, courseId }: AttachmentFormProps) => {
               No attachments added yet
             </p>
           )}
+          {initialData.attachments.length > 0 && (
+            <div className="space-y-2"></div>
+          )}
         </>
       )}
       {isEditing && (
