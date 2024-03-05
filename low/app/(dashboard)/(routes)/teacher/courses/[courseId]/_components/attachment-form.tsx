@@ -23,28 +23,27 @@ import toast from "react-hot-toast";
 import { Textarea } from "@/components/ui/textarea";
 import { Attachment, Course } from "@prisma/client";
 import Image from "next/image";
+import { url } from "inspector";
 
 interface AttachmentFormProps {
   initialData: Course & { attachments: Attachment[] };
   courseId: string;
 }
 const formSchema = z.object({
-  imageUrl: z.string().min(1, {
-    message: "Image is required",
-  }),
+  url: z.string().min(1),
 });
 
 const AttachmentForm = ({ initialData, courseId }: AttachmentFormProps) => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      imageUrl: initialData?.imageUrl || "",
-    },
-  });
-  const { isSubmitting, isValid } = form.formState;
+  // const form = useForm<z.infer<typeof formSchema>>({
+  //   resolver: zodResolver(formSchema),
+  //   defaultValues: {
+  //     url: initialData?.imageUrl || "",
+  //   },
+  // });
+  // const { isSubmitting, isValid } = form.formState;
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.patch(`/api/courses/${courseId}`, values);
+      await axios.post(`/api/courses/${courseId}/attachments`, values);
       toast.success("Course title updated");
       toggleEditing();
       router.refresh();
@@ -65,38 +64,32 @@ const AttachmentForm = ({ initialData, courseId }: AttachmentFormProps) => {
           {!isEditing && (
             <>
               <Plus className=" h-4 w-4 mr-2" />
-              Add a File
+              Add an attachment
             </>
           )}
         </Button>
       </div>
-      {!isEditing &&
-        (!initialData.imageUrl ? (
-          <div className=" flex items-center justify-center h-60 bg-slate-200 rounded-md">
-            <ImageIcon className=" h-10 w-10 text-slate-500" />
-          </div>
-        ) : (
-          <div className=" relative aspect-video mt-2">
-            <Image
-              src={initialData.imageUrl}
-              alt="Course Image"
-              fill
-              className="object-cover rounded-md"
-            />
-          </div>
-        ))}
+      {!isEditing && (
+        <>
+          {initialData.attachments.length === 0 && (
+            <p className=" text-sm mt-2 text-slate-500 italic">
+              No attachments added yet
+            </p>
+          )}
+        </>
+      )}
       {isEditing && (
         <div>
           <FileUpload
-            endpoint="courseImage"
+            endpoint="courseAttachment"
             onChange={(url) => {
               if (url) {
-                onSubmit({ imageUrl: url });
+                onSubmit({ url: url });
               }
             }}
           />
           <div className="text-xs text-muted-foreground mt-4">
-            16:9 aspect ratio recommended
+            Attachments can be images, videos, or any other file type
           </div>
         </div>
       )}
