@@ -29,6 +29,12 @@ interface PriceFormProps {
 const formSchema = z.object({
   price: z.coerce.number(),
 });
+const formatPrice = (price: number) => {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  }).format(price);
+};
 
 const PriceForm = ({ initialData, courseId }: PriceFormProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
@@ -73,7 +79,7 @@ const PriceForm = ({ initialData, courseId }: PriceFormProps) => {
             !initialData.price && "text-slate-500 italic"
           )}
         >
-          {initialData.price || "No price set"}
+          {initialData.price ? formatPrice(initialData.price) : "No price set"}
         </p>
       )}
       {isEditing && (
