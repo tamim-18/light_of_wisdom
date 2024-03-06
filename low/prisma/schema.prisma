@@ -65,9 +65,13 @@ model Chapter{
   isPublished Boolean @default(false)
   isFree Boolean @default(false)
   muxData MuxData?
+
   courseId String
   course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+
   userProgress UserProgress[]
+  
   createdAt DateTime @default(now())  
   updatedAt DateTime @updatedAt
 
@@ -96,6 +100,8 @@ model UserProgress{
 
   chapterId String
   chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+
+
   isCompleted Boolean @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -127,7 +133,7 @@ model Purchase{
 model StripeCustomer{
   id String @id @default(uuid())
   userId String @unique
-  
+
   stripeCustomerId String @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
