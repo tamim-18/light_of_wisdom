@@ -18,7 +18,7 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { ImageIcon, Pencil, Plus } from "lucide-react";
+import { File, ImageIcon, Loader2, Pencil, Plus, X } from "lucide-react";
 import toast from "react-hot-toast";
 import { Textarea } from "@/components/ui/textarea";
 import { Attachment, Course } from "@prisma/client";
@@ -34,13 +34,6 @@ const formSchema = z.object({
 });
 
 const AttachmentForm = ({ initialData, courseId }: AttachmentFormProps) => {
-  // const form = useForm<z.infer<typeof formSchema>>({
-  //   resolver: zodResolver(formSchema),
-  //   defaultValues: {
-  //     url: initialData?.imageUrl || "",
-  //   },
-  // });
-  // const { isSubmitting, isValid } = form.formState;
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await axios.post(`/api/courses/${courseId}/attachments`, values);
@@ -52,8 +45,21 @@ const AttachmentForm = ({ initialData, courseId }: AttachmentFormProps) => {
     }
   };
   const [isEditing, setIsEditing] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const toggleEditing = () => setIsEditing((prev) => !prev);
   const router = useRouter();
+  const onDelete = async (id: string) => {
+    try {
+      setDeletingId(id);
+      await axios.delete(`/api/courses/${courseId}/attachments/${id}`);
+      toast.success("Attachment deleted");
+      router.refresh();
+    } catch {
+      toast.error("Failed to delete attachment");
+    } finally {
+      setDeletingId(null);
+    }
+  };
 
   return (
     <div className=" mt-6 bg-slate-100 rounded-md p-4">
@@ -77,7 +83,30 @@ const AttachmentForm = ({ initialData, courseId }: AttachmentFormProps) => {
             </p>
           )}
           {initialData.attachments.length > 0 && (
-            <div className="space-y-2"></div>
+            <div className="space-y-2">
+              {initialData.attachments.map((attachment) => (
+                <div
+                  key={attachment.id}
+                  className=" flex items-center p-3 w-full bg-sky-100 border-sky-200 text-sky-700 rounded-md"
+                >
+                  <File className=" h-4 w-4 mr-2" />
+                  <p className=" xs line-clamp-1">{attachment.name}</p>
+                  {deletingId === attachment.id && (
+                    <div>
+                      <Loader2 className=" h-4 w-4 animate-spin" />
+                    </div>
+                  )}
+                  {deletingId !== attachment.id && (
+                    <Button
+                      className=" ml-auto hover:opacity-75 transition"
+                      onClick={() => onDelete(attachment.id)}
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  )}
+                </div>
+              ))}
+            </div>
           )}
         </>
       )}
