@@ -22,8 +22,12 @@ model Course{
   isPublished Boolean @default(false)
   category Category? @relation(fields: [categoryId], references: [id])
 
-  categoryId String?
+  chapters Chapter[]
   attachments Attachment[]
+  purchases Purchase[]
+
+  categoryId String?
+  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -51,4 +55,80 @@ model Attachment{
   updatedAt DateTime @updatedAt
 
   @@index([courseId])
+}
+model Chapter{
+  id String @id @default(uuid())
+  title String
+  description String? @db.Text
+  videoUrl String? @db.Text
+  position Int
+  isPublished Boolean @default(false)
+  isFree Boolean @default(false)
+  muxData MuxData?
+  courseId String
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  userProgress UserProgress[]
+  createdAt DateTime @default(now())  
+  updatedAt DateTime @updatedAt
+
+  @@index([courseId])
+}
+model MuxData{
+  id String @id @default(uuid())
+  playbackId String
+  assetId String
+  
+  chapterId String @unique
+  chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+
+
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  
+  
+
+}
+model UserProgress{
+  id String @id @default(uuid())
+  userId String
+
+  chapterId String
+  chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  isCompleted Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+
+  @@index([chapterId])
+  @@unique([userId, chapterId ])
+
+
+}
+
+model Purchase{
+  id String @id @default(uuid())
+  userId String
+
+  courseId String
+  course Course @relation(fields: [courseId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([courseId])
+  @@unique([userId, courseId])
+
+
+
+}
+
+model StripeCustomer{
+  id String @id @default(uuid())
+  userId String @unique
+  
+  stripeCustomerId String @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
