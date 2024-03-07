@@ -21,6 +21,7 @@ import { Pencil, Plus } from "lucide-react";
 import toast from "react-hot-toast";
 import { Textarea } from "@/components/ui/textarea";
 import { Chapter, Course } from "@prisma/client";
+import ChapterList from "./chapter-list";
 
 interface ChapterFormProps {
   initialData: Course & { chapters: Chapter[] };
@@ -105,6 +106,11 @@ const ChapterForm = ({ initialData, courseId }: ChapterFormProps) => {
         >
           {!initialData.chapters.length && "No Chapters"}
           {/* TO Do Chapters */}
+          <ChapterList
+            onEdit={() => {}}
+            onReorder={() => {}}
+            item={initialData.chapters || []}
+          />
         </div>
       )}
       {!isCreating && (
