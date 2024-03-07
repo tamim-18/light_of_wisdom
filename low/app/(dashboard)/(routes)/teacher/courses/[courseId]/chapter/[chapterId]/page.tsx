@@ -1,0 +1,65 @@
+import { IconBadge } from "@/components/icon-badge";
+import { db } from "@/lib/db";
+import { auth } from "@clerk/nextjs";
+import { ArrowLeftCircle, LayoutDashboardIcon } from "lucide-react";
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import React from "react";
+
+const ChapterId = async ({
+  params,
+}: {
+  params: { courseId: string; chapterId: string };
+}) => {
+  const { userId } = auth();
+  if (!userId) return redirect("/");
+
+  const chapter = await db.chapter.findUnique({
+    where: {
+      id: params.chapterId,
+    },
+    include: {
+      muxData: true,
+    },
+  });
+  if (!chapter) return redirect("/");
+
+  const requireFields = [chapter.title, chapter.description, chapter.videoUrl];
+  const totalFields = requireFields.length;
+  const completedFields = requireFields.filter(Boolean).length;
+  const completedText = `${completedFields}/${totalFields} fields completed`;
+  return (
+    <div className="p-6">
+      <div className="flex items-center justify-between ">
+        <div className="w-full">
+          <Link
+            className=" flex items-center text-sm hover:opacity-75 transition mb-6"
+            href={`/teacher/courses/${params.courseId}`}
+          >
+            <ArrowLeftCircle className=" h-4 w-4 mr-2" />
+            Back to course setup
+          </Link>
+          <div className=" flex items-center justify-between w-full">
+            <div className=" flex flex-col gap-y-2">
+              <h1 className=" text-2xl font-medium"> Chapters Creation</h1>
+              <span className=" text-sm text-slate-700">{completedText}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className=" grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">
+        <div className=" space-y-4">
+          <div>
+            <div className=" flex items-center gap-x-2">
+              <IconBadge icon={LayoutDashboardIcon} size="sm" />
+              <h2 className="text-xl">Customize Your Chapter</h2>
+            </div>
+            {/* Chapter titleform */}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ChapterId;
