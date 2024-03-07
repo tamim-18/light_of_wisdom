@@ -31,7 +31,7 @@ export async function POST(
         position: "desc",
       },
     });
-    const newPosition = latChapter?.position ? latChapter.position + 1 : 1;
+    const newPosition = latChapter ? latChapter.position + 1 : 1;
 
     const chapter = await db.chapter.create({
       data: {
