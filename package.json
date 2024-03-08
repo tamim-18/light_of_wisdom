@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@mux/mux-node": "^8.0.0",
+    "@mux/mux-player-react": "^2.3.3"
+  }
+}
