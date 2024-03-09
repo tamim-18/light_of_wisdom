@@ -4,3 +4,4 @@ const formatPrice = (price: number) => {
     currency: "USD",
   }).format(price);
 };
+export { formatPrice };
