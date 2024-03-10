@@ -1,5 +1,5 @@
 "use client";
-import { BarChart, Compass, Layout, List } from "lucide-react";
+import { BarChart, Compass, Layout, List, BookCheck } from "lucide-react";
 import React from "react";
 import SidebarItem from "./sidebar-item";
 import { LucideIcon } from "lucide-react"; // Add this import statement
@@ -15,6 +15,11 @@ const sidebarRoutes = [
     icon: Compass,
     name: "Browse",
     path: "/search",
+  },
+  {
+    icon: BookCheck,
+    name: "Exam Corner",
+    path: "/exam-dashboard",
   },
 ];
 const teacherRoutes = [
