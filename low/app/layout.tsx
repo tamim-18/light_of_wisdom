@@ -4,6 +4,7 @@ import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import ToastProvider from "@/components/provider/toaster-provider";
 import { ConfettiProvider } from "@/components/provider/confetti-provider";
+import Chatbot from "@/components/chatbot";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,6 +21,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
+        <Chatbot />
         <body className={inter.className}>
           <ConfettiProvider />
           <ToastProvider />
