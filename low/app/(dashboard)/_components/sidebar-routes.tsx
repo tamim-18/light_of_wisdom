@@ -1,5 +1,12 @@
 "use client";
-import { BarChart, Compass, Layout, List, BookCheck } from "lucide-react";
+import {
+  BarChart,
+  Compass,
+  Layout,
+  List,
+  BookCheck,
+  Airplay,
+} from "lucide-react";
 import React from "react";
 import SidebarItem from "./sidebar-item";
 import { LucideIcon } from "lucide-react"; // Add this import statement
@@ -20,6 +27,11 @@ const sidebarRoutes = [
     icon: BookCheck,
     name: "Exam Corner",
     path: "/exam-dashboard",
+  },
+  {
+    icon: Airplay,
+    name: "Remix AI",
+    path: "http://localhost:3001",
   },
 ];
 const teacherRoutes = [

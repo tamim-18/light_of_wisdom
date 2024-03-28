@@ -5,6 +5,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import ToastProvider from "@/components/provider/toaster-provider";
 import { ConfettiProvider } from "@/components/provider/confetti-provider";
 import Chatbot from "@/components/chatbot";
+import { ThemeProvider } from "@/components/provider/theme-provder";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,11 +23,18 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <Chatbot />
+        {/* <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        > */}
         <body className={inter.className}>
           <ConfettiProvider />
           <ToastProvider />
           {children}
         </body>
+        {/* </ThemeProvider> */}
       </html>
     </ClerkProvider>
   );
