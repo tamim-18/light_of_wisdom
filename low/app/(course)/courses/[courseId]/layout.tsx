@@ -52,14 +52,19 @@ const CourseLayout = async ({
   console.log(progressCount);
 
   return (
-    <div className="h-full">
-      <div className="h-[80px]  fixed inset-y-0 w-full z-50 md:pl-80">
+    <div>
+      <div className="h-[80px]  fixed inset-y-0 w-full z-50">
         <CourseNavbar course={course} progressCount={progressCount} />
       </div>
-      <div className="hidden md:flex h-full w-80 flex-col fixed inset-y-0 z-50">
-        <CourseSidebar course={course} progressCount={progressCount} />
+      <div className="mt-[85px] justify-center h-full">
+        <div className="flex overflow-y-auto flex-wrap gap-10">
+          <div className="overflow-y-auto w-[60vw]">
+            <main className="h-full">{children}</main>
+          </div>
+          <CourseSidebar course={course} progressCount={progressCount} />
+
+        </div>
       </div>
-      <main className="md:pl-80 pt-[80px] h-full">{children}</main>
     </div>
   );
 };

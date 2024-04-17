@@ -36,7 +36,7 @@ export const CourseSidebar = async ({
   });
 
   return (
-    <div className="h-full border-r flex flex-col overflow-y-auto shadow-sm">
+    <div className="h-[70vh] border flex flex-col overflow-y-auto shadow-large">
       <div className="p-8 flex flex-col border-b">
         <h1 className="font-semibold">{course.title}</h1>
         {purchase && (
@@ -45,7 +45,7 @@ export const CourseSidebar = async ({
           </div>
         )}
       </div>
-      <div className="flex flex-col w-full">
+      <div className="flex flex-col p-5 w-full overflow-y-auto">
         {course.chapters.map((chapter) => (
           <CourseSidebarItem
             key={chapter.id}
