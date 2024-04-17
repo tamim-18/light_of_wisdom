@@ -66,9 +66,9 @@ export const TitleForm = ({
             onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-4 mt-4"
           >
-    <div className="mt-6 border bg-slate-100 rounded-2xl p-4">
-      <div className="font-medium text-gray-600  flex items-center justify-between">
-        <span style={{ color: "grey" }}>{"Course title"}</span>
+    <div className="mt-6 border btn bg-slate-100 rounded-2xl p-4">
+      <div className="font-medium text-[silver] flex items-center justify-between">
+        <span style={{ color: "silver" }}>{"Course title"}</span>
         {isEditing && (
               <div className="flex flex-row pb-3">
                 <div className="flex items-center gap-x-2">
@@ -116,6 +116,7 @@ export const TitleForm = ({
                   <FormControl>
                     <Input
                       disabled={isSubmitting}
+                      style={{ background: "#0D0D0D" }}
                       placeholder="e.g. 'Advanced web development'"
                       {...field}
                     />

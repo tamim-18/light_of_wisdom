@@ -51,9 +51,10 @@ export const ImageForm = ({
   }
 
   return (
-    <div className="mt-6 border bg-slate-100 rounded-2xl p-4">
+    <div className="mt-6 selected_post  border bg-slate-100 rounded-2xl p-4">
       {isEditing && (
         <div>
+          <div className="btn">
           <FileUpload
             endpoint="courseImage"
             onChange={(url) => {
@@ -61,8 +62,8 @@ export const ImageForm = ({
                 onSubmit({ imageUrl: url });
               }
             }}
-          />
-          <div className="text-xs text-muted-foreground mt-4">
+          /></div>
+          <div className="text-xs text-[silver] mt-4">
             16:9 aspect ratio recommended
           </div>
         </div>

@@ -67,8 +67,8 @@ export const PriceForm = ({
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-4 mt-4"
       >
-        <div className="mt-6 border bg-slate-100 rounded-2xl p-4">
-          <div className="font-medium text-gray-600 flex items-center justify-between">
+        <div className="mt-6 border btn bg-slate-100 rounded-2xl p-4">
+          <div className="font-medium text-[silver] flex items-center justify-between">
             Course price
             {isEditing && (
               <div className="flex flex-row relative pb-1">
@@ -128,6 +128,7 @@ export const PriceForm = ({
                       type="number"
                       step="0.01"
                       disabled={isSubmitting}
+                      style={{background: '#0D0D0D'}}
                       placeholder="Set a price for your course"
                       {...field}
                     />

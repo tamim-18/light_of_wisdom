@@ -68,9 +68,9 @@ export const DescriptionForm = ({
             onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-4 mt-4"
           >
-    <div className="mt-6 border bg-slate-100 rounded-2xl p-6 flex-1">
-      <div className="font-medium text-gray-600 flex items-center justify-between">
-        Course description
+    <div className="mt-6 border selected_post bg-slate-100 rounded-2xl p-6 flex-1">
+      <div className="font-medium flex items-center justify-between">
+        <span className="text-white">Course description</span>
         {isEditing && (
               <div className="flex flex-row pb-3">
                 <div className="flex items-center gap-x-2">
@@ -121,7 +121,7 @@ export const DescriptionForm = ({
                   <FormControl>
                     <Textarea
                       disabled={isSubmitting}
-                      style={{ height: '50vh' }}
+                      style={{ height: '50vh', background: '#0D0D0D' }}
                       placeholder="e.g. 'This course is about...'"
                       {...field}
                     />

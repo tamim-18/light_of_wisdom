@@ -83,11 +83,13 @@ const CourseIdPage = async ({
         />
       </div>
       <div className="flex flex-wrap gap-10">
+        <div>
         <ImageForm
           initialData={course}
           courseId={course.id}
           categories={categories}
         />
+        </div>
         <div className="flex-1">
 
           <DescriptionForm
