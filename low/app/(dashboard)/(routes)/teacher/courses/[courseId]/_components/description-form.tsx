@@ -20,23 +20,22 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
-import { Combobox } from "@/components/ui/combobox";
 
-interface CategoryFormProps {
+interface DescriptionFormProps {
   initialData: Course;
   courseId: string;
-  options: { label: string; value: string; }[];
 };
 
 const formSchema = z.object({
-  categoryId: z.string().min(1),
+  description: z.string().min(1, {
+    message: "Description is required",
+  }),
 });
 
-export const CategoryForm = ({
+export const DescriptionForm = ({
   initialData,
-  courseId,
-  options,
-}: CategoryFormProps) => {
+  courseId
+}: DescriptionFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
 
   const toggleEdit = () => setIsEditing((current) => !current);
@@ -46,7 +45,7 @@ export const CategoryForm = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      categoryId: initialData?.categoryId || ""
+      description: initialData?.description || ""
     },
   });
 
@@ -63,18 +62,16 @@ export const CategoryForm = ({
     }
   }
 
-  const selectedOption = options.find((option) => option.value === initialData.categoryId);
-
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-4 mt-4"
-      >
-        <div className="mt-6 border bg-slate-100 rounded-2xl p-4">
-          <div className="font-medium text-gray-600 flex items-center justify-between">
-            Course category
-            {isEditing && (
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-4 mt-4"
+          >
+    <div className="mt-6 border bg-slate-100 rounded-2xl p-6 flex-1">
+      <div className="font-medium text-gray-600 flex items-center justify-between">
+        Course description
+        {isEditing && (
               <div className="flex flex-row pb-3">
                 <div className="flex items-center gap-x-2">
                   <Button
@@ -97,43 +94,46 @@ export const CategoryForm = ({
                 </div>
               </div>
             )}
-            {isEditing ? (
-              <></>
-            ) : (
-              <Button onClick={toggleEdit} variant="ghost" type="button" autoFocus={false}>
-                <Pencil className="h-4 w-4 mr-2" />
-                Edit Category
-              </Button>
-            )}
-          </div>
-          {!isEditing && (
-            <p className={cn(
-              "text-large mt-2",
-              !initialData.categoryId && "text-slate-500 italic"
-            )}><b>
-                {selectedOption?.label || "No category"}</b>
-            </p>
-          )}
-          {isEditing && (
-
+              {isEditing ? (
+                <></>
+              ) : (
+                <Button onClick={toggleEdit} variant="ghost" type="button" autoFocus={false}>
+                  <Pencil className="h-4 w-4 mr-2" />
+                  Edit Description
+                  </Button>
+              )}
+      </div>
+      {!isEditing && (
+        <div>
+          <Textarea
+            disabled={true}
+            style={{ height: '20vh', padding: '2rem' }}
+            placeholder={initialData.description || "This Course is about..."}
+          />
+        </div>
+      )}
+      {isEditing && (
             <FormField
               control={form.control}
-              name="categoryId"
+              name="description"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Combobox
-                      options={...options}
-                    {...field}
+                    <Textarea
+                      disabled={isSubmitting}
+                      style={{ height: '50vh' }}
+                      placeholder="e.g. 'This course is about...'"
+                      {...field}
                     />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-          )}
-        </div>
-      </form>
-    </Form>
+      )}
+    </div>
+
+          </form>
+        </Form>
   )
 }

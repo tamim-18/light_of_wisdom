@@ -8,7 +8,6 @@ import { Pencil } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { Course } from "@prisma/client";
 
 import {
   Form,
@@ -17,26 +16,26 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { Textarea } from "@/components/ui/textarea";
-import { Combobox } from "@/components/ui/combobox";
 
-interface CategoryFormProps {
-  initialData: Course;
+interface TitleFormProps {
+  initialData: {
+    title: string;
+  };
   courseId: string;
-  options: { label: string; value: string; }[];
 };
 
 const formSchema = z.object({
-  categoryId: z.string().min(1),
+  title: z.string().min(1, {
+    message: "Title is required",
+  }),
 });
 
-export const CategoryForm = ({
+export const TitleForm = ({
   initialData,
-  courseId,
-  options,
-}: CategoryFormProps) => {
+  courseId
+}: TitleFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
 
   const toggleEdit = () => setIsEditing((current) => !current);
@@ -45,9 +44,7 @@ export const CategoryForm = ({
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      categoryId: initialData?.categoryId || ""
-    },
+    defaultValues: initialData,
   });
 
   const { isSubmitting, isValid } = form.formState;
@@ -63,18 +60,16 @@ export const CategoryForm = ({
     }
   }
 
-  const selectedOption = options.find((option) => option.value === initialData.categoryId);
-
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-4 mt-4"
-      >
-        <div className="mt-6 border bg-slate-100 rounded-2xl p-4">
-          <div className="font-medium text-gray-600 flex items-center justify-between">
-            Course category
-            {isEditing && (
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-4 mt-4"
+          >
+    <div className="mt-6 border bg-slate-100 rounded-2xl p-4">
+      <div className="font-medium text-gray-600  flex items-center justify-between">
+        <span style={{ color: "grey" }}>{"Course title"}</span>
+        {isEditing && (
               <div className="flex flex-row pb-3">
                 <div className="flex items-center gap-x-2">
                   <Button
@@ -97,43 +92,41 @@ export const CategoryForm = ({
                 </div>
               </div>
             )}
-            {isEditing ? (
-              <></>
-            ) : (
-              <Button onClick={toggleEdit} variant="ghost" type="button" autoFocus={false}>
-                <Pencil className="h-4 w-4 mr-2" />
-                Edit Category
-              </Button>
-            )}
-          </div>
-          {!isEditing && (
-            <p className={cn(
-              "text-large mt-2",
-              !initialData.categoryId && "text-slate-500 italic"
-            )}><b>
-                {selectedOption?.label || "No category"}</b>
-            </p>
-          )}
-          {isEditing && (
-
+              {isEditing ? (
+                <></>
+              ) : (
+                <Button onClick={toggleEdit} variant="ghost" type="button" autoFocus={false}>
+                  <Pencil className="h-4 w-4 mr-2" />
+                  Edit Title
+                  </Button>
+              )}
+      </div>
+      {!isEditing && (
+        <p className="text-xl mt-2"><b>
+          {initialData.title}</b>
+        </p>
+      )}
+      {isEditing && (
+        
             <FormField
               control={form.control}
-              name="categoryId"
+              name="title"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Combobox
-                      options={...options}
-                    {...field}
+                    <Input
+                      disabled={isSubmitting}
+                      placeholder="e.g. 'Advanced web development'"
+                      {...field}
                     />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-          )}
-        </div>
-      </form>
-    </Form>
+            )}
+    </div>
+            </form>
+          </Form>
   )
 }

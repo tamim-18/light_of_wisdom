@@ -1,96 +1,57 @@
 "use client";
-import React, { useState } from "react";
+
 import * as z from "zod";
 import axios from "axios";
-import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
-import { db } from "@/lib/db";
-import { cn } from "@/lib/utils";
-import { zodResolver } from "@hookform/resolvers/zod";
-
-import { Button } from "@/components/ui/button";
-import { FileUpload } from "@/components/file-upload";
-import { Input } from "@/components/ui/input";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
-import { ImageIcon, Pencil, Plus } from "lucide-react";
+import { Pencil, PlusCircle, ImageIcon } from "lucide-react";
+import { useState } from "react";
 import toast from "react-hot-toast";
-import { Textarea } from "@/components/ui/textarea";
+import { useRouter } from "next/navigation";
 import { Course } from "@prisma/client";
 import Image from "next/image";
 
+import { Button } from "@/components/ui/button";
+import { FileUpload } from "@/components/file-upload";
+import { CameraIcon } from "@radix-ui/react-icons";
+import { CategoryForm } from "./category-form";
+import { PriceForm } from "./price-form";
+import { TitleForm } from "./title-form";
+
 interface ImageFormProps {
-  initialData: Course;
+  initialData: Course
   courseId: string;
-}
+  categories: { id: string; name: string }[];
+};
+
 const formSchema = z.object({
   imageUrl: z.string().min(1, {
     message: "Image is required",
   }),
 });
 
-const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      imageUrl: initialData?.imageUrl || "",
-    },
-  });
-  const { isSubmitting, isValid } = form.formState;
+export const ImageForm = ({
+  initialData,
+  courseId,
+  categories
+}: ImageFormProps) => {
+  const [isEditing, setIsEditing] = useState(false);
+
+  const toggleEdit = () => setIsEditing((current) => !current);
+
+  const router = useRouter();
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await axios.patch(`/api/courses/${courseId}`, values);
-      toast.success("Course title updated");
-      toggleEditing();
+      toast.success("Course updated");
+      toggleEdit();
       router.refresh();
     } catch {
-      toast.error("Failed to update course title");
+      toast.error("Something went wrong");
     }
-  };
-  const [isEditing, setIsEditing] = useState(false);
-  const toggleEditing = () => setIsEditing((prev) => !prev);
-  const router = useRouter();
+  }
 
   return (
-    <div className=" mt-6 bg-slate-100 rounded-md p-4">
-      <div className=" flex font-medium items-center justify-between">
-        Course Image
-        <Button onClick={toggleEditing} variant="ghost">
-          {isEditing && <>Cancel</>}
-          {!isEditing && !initialData.imageUrl && (
-            <>
-              <Plus className=" h-4 w-4 mr-2" />
-              Add Image
-            </>
-          )}
-          {!isEditing && initialData.imageUrl && (
-            <>
-              <Pencil className=" h-4 w-4 mr-2" />
-              Edit Description
-            </>
-          )}
-        </Button>
-      </div>
-      {!isEditing &&
-        (!initialData.imageUrl ? (
-          <div className=" flex items-center justify-center h-60 bg-slate-200 rounded-md">
-            <ImageIcon className=" h-10 w-10 text-slate-500" />
-          </div>
-        ) : (
-          <div className=" relative aspect-video mt-2">
-            <Image
-              src={initialData.imageUrl}
-              alt="Course Image"
-              fill
-              className="object-cover rounded-md"
-            />
-          </div>
-        ))}
+    <div className="mt-6 border bg-slate-100 rounded-2xl p-4">
       {isEditing && (
         <div>
           <FileUpload
@@ -106,8 +67,60 @@ const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
           </div>
         </div>
       )}
-    </div>
-  );
-};
+      <div className="relative">
+        {!isEditing && (
+          !initialData.imageUrl ? (
+            <img
+              src="https://placehold.co/600x400?text=Add%20Cover%20Picture"
+              alt="Placeholder"
+              className="h-[40vh]"
+            />
+          ) : (
+            <img
+              src={initialData.imageUrl}
+              alt="Placeholder"
+              className="md:w-[30vw] w-full"
+            />
 
-export default ImageForm;
+          )
+        )}
+        <div className="absolute right-0 top-0 p-4">
+          <Button onClick={toggleEdit}>
+            {isEditing && (
+              <>Cancel</>
+            )}
+            {!isEditing && !initialData.imageUrl && (
+              <>
+                <PlusCircle className="h-4 w-4" />
+              </>
+            )}
+            {!isEditing && initialData.imageUrl && (
+              <>
+                <CameraIcon className="h-6 w-4 mr-2" fontSize={"large"} />
+              </>
+            )}
+          </Button>
+        </div>
+        <div >
+          <TitleForm
+            initialData={initialData}
+            courseId={courseId}
+          />
+          <CategoryForm
+            initialData={initialData}
+            courseId={courseId}
+            options={categories.map((category) => ({
+              label: category.name,
+              value: category.id,
+            }))}
+          />
+          <PriceForm
+            initialData={initialData}
+            courseId={courseId}
+          />
+        </div>
+      </div>
+
+    </div>
+  )
+}
