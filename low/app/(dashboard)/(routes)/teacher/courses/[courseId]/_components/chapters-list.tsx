@@ -101,7 +101,7 @@ export const ChaptersList = ({
                           chapter.isPublished && "bg-sky-700"
                         )}
                       >
-                        {chapter.isPublished ? "Published" : "Draft"}
+                        {chapter.isPublished ? "Published" : "Unpublished"}
                       </Badge>
                       <Pencil
                         onClick={() => onEdit(chapter.id)}

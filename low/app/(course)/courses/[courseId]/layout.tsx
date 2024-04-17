@@ -56,10 +56,10 @@ const CourseLayout = async ({
       <div className="h-[80px]  fixed inset-y-0 w-full z-50">
         <CourseNavbar course={course} progressCount={progressCount} />
       </div>
-      <div className="mt-[85px] justify-center h-full">
-        <div className="flex overflow-y-auto flex-wrap gap-10">
+      <div className="mt-[85px] justify-center items-center h-full">
+        <div className="flex h-[80vh] overflow-y-auto flex-wrap gap-10">
           <div className="overflow-y-auto w-[60vw]">
-            <main className="h-full">{children}</main>
+            <main>{children}</main>
           </div>
           <CourseSidebar course={course} progressCount={progressCount} />
 

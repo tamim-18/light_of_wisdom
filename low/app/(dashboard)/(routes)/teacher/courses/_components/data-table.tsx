@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useRouter } from "next/navigation";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -14,7 +15,8 @@ import {
 } from "@tanstack/react-table";
 import Link from "next/link";
 import { PlusCircle } from "lucide-react";
-
+import axios from "axios";
+import toast from "react-hot-toast";
 import {
   Table,
   TableBody,
@@ -35,6 +37,8 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
+  const router = useRouter();
+
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -55,6 +59,7 @@ export function DataTable<TData, TValue>({
     },
   });
 
+
   return (
     <div>
       <div className="flex items-center py-4 justify-between">
@@ -66,12 +71,22 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
-        <Link href="/teacher/create">
-          <Button>
+          <Button onClick={async () => {
+              try {
+                const response = await axios.post("/api/courses", {
+                  title: "Untitled2",
+                });
+                console.log("hoise "+response.data.id);
+                router.push(`/teacher/courses/${response.data.id}`);
+                toast.success("Course created");
+              } catch {
+                toast.error("Something went wrong");
+              }
+            }}>
             <PlusCircle className="h-4 w-4 mr-2" />
             New course
           </Button>
-        </Link>
+        
       </div>
       <div className="rounded-md border">
         <Table>

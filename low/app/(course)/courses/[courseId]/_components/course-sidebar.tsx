@@ -45,7 +45,7 @@ export const CourseSidebar = async ({
           </div>
         )}
       </div>
-      <div className="flex flex-col p-5 w-full overflow-y-auto">
+      <div className="flex flex-col p-5 mx-5 overflow-y-auto">
         {course.chapters.map((chapter) => (
           <CourseSidebarItem
             key={chapter.id}
