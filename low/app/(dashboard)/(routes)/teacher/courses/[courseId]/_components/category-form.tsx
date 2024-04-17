@@ -25,8 +25,8 @@ import { Combobox } from "@/components/ui/combobox";
 interface CategoryFormProps {
   initialData: Course;
   courseId: string;
-  options: { label: string; value: string; }[];
-};
+  options: { label: string; value: string }[];
+}
 
 const formSchema = z.object({
   categoryId: z.string().min(1),
@@ -46,7 +46,7 @@ export const CategoryForm = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      categoryId: initialData?.categoryId || ""
+      categoryId: initialData?.categoryId || "",
     },
   });
 
@@ -61,26 +61,22 @@ export const CategoryForm = ({
     } catch {
       toast.error("Something went wrong");
     }
-  }
+  };
 
-  const selectedOption = options.find((option) => option.value === initialData.categoryId);
+  const selectedOption = options.find(
+    (option) => option.value === initialData.categoryId
+  );
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-4 mt-4"
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 mt-4">
         <div className="mt-6 border btn bg-slate-100 rounded-2xl p-4">
           <div className="font-medium text-[silver] flex items-center justify-between">
             Course category
             {isEditing && (
               <div className="flex flex-row pb-3">
                 <div className="flex items-center gap-x-2">
-                  <Button
-                    disabled={!isValid || isSubmitting}
-                    type="submit"
-                  >
+                  <Button disabled={!isValid || isSubmitting} type="submit">
                     Save
                   </Button>
                 </div>
@@ -100,40 +96,45 @@ export const CategoryForm = ({
             {isEditing ? (
               <></>
             ) : (
-              <Button onClick={toggleEdit} variant="ghost" type="button" autoFocus={false}>
+              <Button
+                onClick={toggleEdit}
+                variant="ghost"
+                type="button"
+                autoFocus={false}
+              >
                 <Pencil className="h-4 w-4 mr-2" />
                 Edit Category
               </Button>
             )}
           </div>
           {!isEditing && (
-            <p className={cn(
-              "text-large mt-2",
-              !initialData.categoryId && "text-slate-500 italic"
-            )}><b>
-                {selectedOption?.label || "No category"}</b>
+            <p
+              className={cn(
+                "text-large mt-2",
+                !initialData.categoryId && "text-slate-500 italic"
+              )}
+            >
+              <b>{selectedOption?.label || "No category"}</b>
             </p>
           )}
           {isEditing && (
-
-            <FormField
-              control={form.control}
-              name="categoryId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Combobox
-                      options={...options}
-                    {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className=" text-slate-800">
+              <FormField
+                control={form.control}
+                name="categoryId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Combobox options={...options} {...field} />
+                    </FormControl>
+                    <FormMessage style={{ background: "#0D0D0D" }} />
+                  </FormItem>
+                )}
+              />
+            </div>
           )}
         </div>
       </form>
     </Form>
-  )
-}
+  );
+};

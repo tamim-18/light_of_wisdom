@@ -55,7 +55,7 @@ const ChapterId = async ({
             </Link>
             <div className=" flex items-center justify-between w-full">
               <div className=" flex flex-col gap-y-2">
-                <h1 className=" text-2xl font-medium"> Chapters Creation</h1>
+                <h1 className=" text-2xl font-medium"> Create Your Chapter</h1>
                 <span className=" text-sm text-slate-700">{completedText}</span>
               </div>
               <ChapterActions
@@ -67,13 +67,14 @@ const ChapterId = async ({
             </div>
           </div>
         </div>
-        <div className=" grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">
+        <div className=" flex flex-col  gap-6 mt-16 ">
           <div className=" space-y-4">
+            <ChapterVideoForm
+              initialData={chapter}
+              courseId={params.courseId}
+              chapterId={params.chapterId}
+            />
             <div>
-              <div className=" flex items-center gap-x-2">
-                <IconBadge icon={LayoutDashboardIcon} size="sm" />
-                <h2 className="text-xl">Customize Your Chapter</h2>
-              </div>
               {/* Chapter titleform */}
               <ChapterTitleForm
                 initialData={chapter}
@@ -87,10 +88,6 @@ const ChapterId = async ({
               />
             </div>
             <div className=" ">
-              <div className=" flex items-center gap-x-2">
-                <IconBadge icon={Eye} />
-                <h2 className=" text-xl"> Access Settings</h2>
-              </div>
               <ChapterAccessForm
                 initialData={chapter}
                 courseId={params.courseId}
@@ -98,17 +95,7 @@ const ChapterId = async ({
               />
             </div>
           </div>
-          <div>
-            <div className=" flex items-center gap-x-2">
-              <IconBadge icon={Video} />
-              <h2 className=" text-xl"> Add chapter Video</h2>
-            </div>
-            <ChapterVideoForm
-              initialData={chapter}
-              courseId={params.courseId}
-              chapterId={params.chapterId}
-            />
-          </div>
+          <div></div>
         </div>
       </div>
     </>

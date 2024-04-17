@@ -66,7 +66,7 @@ const ChapterVideoForm = ({
   const router = useRouter();
 
   return (
-    <div className=" mt-6 bg-slate-100 rounded-md p-4">
+    <div className=" mt-6 bg-slate-100 rounded-md p-4 btn">
       <div className=" flex font-medium items-center justify-between">
         Course Video
         <Button onClick={toggleEditing} variant="ghost">

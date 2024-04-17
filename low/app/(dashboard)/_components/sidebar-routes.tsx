@@ -31,6 +31,11 @@ const sidebarRoutes = [
   {
     icon: Airplay,
     name: "Remix AI",
+    path: "http://localhost:3002",
+  },
+  {
+    icon: Compass,
+    name: "Discussion Forum",
     path: "http://localhost:3000",
   },
 ];
@@ -39,11 +44,6 @@ const teacherRoutes = [
     icon: List,
     name: "Courses",
     path: "/teacher/courses",
-  },
-  {
-    icon: BarChart,
-    name: "Analytics",
-    path: "/teacher/analytics",
   },
 ];
 

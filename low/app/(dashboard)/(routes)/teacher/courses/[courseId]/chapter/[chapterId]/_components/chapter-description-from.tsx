@@ -63,7 +63,7 @@ const ChapterDescriptionForm = ({
   const router = useRouter();
 
   return (
-    <div className=" mt-6 bg-slate-100 rounded-md p-4">
+    <div className=" mt-6 bg-slate-100 rounded-md p-4 btn">
       <div className=" flex font-medium items-center justify-between">
         Chapter Description
         <Button onClick={toggleEditing} variant="ghost">
@@ -96,18 +96,20 @@ const ChapterDescriptionForm = ({
             onSubmit={form.handleSubmit(onSubmit)}
             className=" space-y-4 mt-4"
           >
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Editor {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="text-slate-700">
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Editor {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
             <div className=" flex items-center gap-x-2 ">
               <Button type="submit" disabled={!isValid || isSubmitting}>
                 Save

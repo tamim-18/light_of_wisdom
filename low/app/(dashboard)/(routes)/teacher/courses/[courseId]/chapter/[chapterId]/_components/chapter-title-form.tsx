@@ -58,7 +58,7 @@ const ChapterTitleForm = ({
   const router = useRouter();
 
   return (
-    <div className=" mt-6 bg-slate-100 rounded-md p-4">
+    <div className=" mt-6 bg-slate-100 rounded-md p-4 btn">
       <div className=" flex font-medium items-center justify-between">
         Chapter Title
         <Button onClick={toggleEditing} variant="ghost">
@@ -88,6 +88,7 @@ const ChapterTitleForm = ({
                       {...field}
                       placeholder="eg. 'Chapter 1: Introduction'"
                       disabled={isSubmitting}
+                      style={{ background: "#0D0D0D" }}
                     />
                   </FormControl>
                   <FormMessage />

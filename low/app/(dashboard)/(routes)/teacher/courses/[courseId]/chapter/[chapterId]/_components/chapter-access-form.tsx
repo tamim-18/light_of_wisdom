@@ -65,7 +65,7 @@ const ChapterAccessForm = ({
   const router = useRouter();
 
   return (
-    <div className=" mt-6 bg-slate-100 rounded-md p-4">
+    <div className=" mt-6 bg-slate-100 rounded-md p-4 btn">
       <div className=" flex font-medium items-center justify-between">
         Chapter Access Settings
         <Button onClick={toggleEditing} variant="ghost">
@@ -108,8 +108,8 @@ const ChapterAccessForm = ({
                       onCheckedChange={field.onChange}
                     />
                   </FormControl>
-                  <div className="space-y-1 leading-none">
-                    <FormDescription>
+                  <div className="space-y-1 leading-none text-white">
+                    <FormDescription className=" text-white">
                       Check this box if you want to make this chapter free for
                       preview
                     </FormDescription>
