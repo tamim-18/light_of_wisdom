@@ -31,7 +31,7 @@ const sidebarRoutes = [
   {
     icon: Airplay,
     name: "Remix AI",
-    path: "http://localhost:3001",
+    path: "http://localhost:3000",
   },
 ];
 const teacherRoutes = [

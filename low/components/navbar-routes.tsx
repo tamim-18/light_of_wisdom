@@ -24,17 +24,25 @@ const NavbarRoutes = () => {
           <SearchInput />
         </div>
       )}
-      <div className="flex gap-x-3 ml-auto">
+      <div className="flex items-center gap-x-3 ml-auto">
         {isTeacherPage || isCoursePage ? (
           <Link href="/">
-            <Button size="sm" variant="ghost">
+            <Button
+              size="sm"
+              variant="ghost"
+              className="text-gray-700 hover:text-blue-500"
+            >
               <LogOut className="h-4 w-4 mr-2" />
               Exit
             </Button>
           </Link>
         ) : isTeacher(userId) ? (
           <Link href="/teacher/courses">
-            <Button size="sm" variant="ghost">
+            <Button
+              size="sm"
+              variant="ghost"
+              className="text-gray-700 hover:text-blue-500"
+            >
               Teacher Mode
             </Button>
           </Link>
